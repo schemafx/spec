@@ -1,0 +1,33 @@
+name: Deploy Versioned Spec
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy Version Folder
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .
+          target-folder: ${{ github.ref_name }}
+          branch: gh-pages
+          clean: false
+
+      - name: Generate versions.json
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+          echo $(ls -d v*/ | sed 's/\///g' | jq -R . | jq -s .) > versions.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add versions.json
+          git commit -m "Update versions.json" || echo "No changes to versions.json"
+          git push origin gh-pages
