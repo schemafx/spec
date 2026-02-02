@@ -31,6 +31,16 @@ Good documentation is crucial for an open-source project. If you're a writer or 
 
 Your perspective is invaluable. We encourage you to open an issue to share your thoughts, ideas for new features, or to report a bug.
 
+### 4. Generating the spec.md
+
+You must have [Node installed](https://nodejs.org/en/download/current). All changes are to be made towards [spec.json](/spec.json), once you are done with changes, run the below command:
+
+```Bash
+node generate.js
+```
+
+This will generate the [spec.md](/spec.md) for human reading.
+
 ## Code of Conduct
 
 This project is governed by the [CODE_OF_CONDUCT](https://github.com/schemafx/.github/blob/main/.github/CODE_OF_CONDUCT.md) policy. By participating, you are expected to uphold this code.
