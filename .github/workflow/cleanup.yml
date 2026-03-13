@@ -1,0 +1,43 @@
+name: Cleanup Deleted Version
+on:
+  delete:
+    tags:
+      - 'v*'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Remove Version Folder
+        run: |
+          TARGET_FOLDER="${{ github.event.ref }}"
+
+          if [ -d "$TARGET_FOLDER" ]; then
+            rm -rf "$TARGET_FOLDER"
+
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "Automated cleanup: Removed $TARGET_FOLDER"
+            git push origin gh-pages
+          else
+            echo "Folder $TARGET_FOLDER does not exist. Nothing to delete."
+          fi
+
+      - name: Generate versions.json
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+          echo $(ls -d v*/ | sed 's/\///g' | jq -R . | jq -s .) > versions.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add versions.json
+          git commit -m "Update versions.json" || echo "No changes to versions.json"
+          git push origin gh-pages
