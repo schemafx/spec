@@ -5163,7 +5163,7 @@
         "ExportFiles": {
             "type": "object",
             "description": "File export configuration.",
-            "required": ["type", "endpoint", "tables"],
+            "required": ["type", "endpoint", "data"],
             "properties": {
                 "type": { "const": "files" },
                 "endpoint": {
