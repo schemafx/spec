@@ -1441,10 +1441,8 @@
                 },
                 "defaultValue": { "$ref": "#/$defs/DefaultValueOrCondition" },
                 "source": {
-                    "type": "string",
-                    "description": "Source field path.",
-                    "minLength": 1,
-                    "examples": ["first_name", "user.email", "created_at", "$['special-key']"]
+                    "$ref": "#/$defs/JSONPathExpression",
+                    "description": "Source field path."
                 },
                 "readTransform": {
                     "$ref": "#/$defs/JsonLogicRule",
