@@ -74,7 +74,7 @@ Unknown properties from newer MINOR versions MUST be preserved during round-trip
 - **Older MAJOR** — MUST reject with a clear error and migration guidance.
 - **Below minimum supported version** — MUST reject with the minimum version and migration guidance.
 
-Validation MUST be performed against the rules normative at the schema's declared `schemaVersion`. Properties introduced after that version MUST NOT be required. See [schema.semantic.md - Version-Aware Rule Enforcement](schema.semantic.md#version-aware-rule-enforcement) for rule versioning details.
+Validation MUST be performed against the rules normative at the schema's declared `schemaVersion`. Properties introduced after that version MUST NOT be required. See [Semantic.md - Version-Aware Rule Enforcement](Semantic.md#version-aware-rule-enforcement) for rule versioning details.
 
 ---
 
@@ -108,7 +108,7 @@ Features progress through three stages: **Stable**, **Deprecated**, **Removed**.
 
 ### Semantic Rule Evolution
 
-New or modified semantic rules MUST update the **Since** column in [schema.semantic.md](schema.semantic.md). Existing rules retain their original `Since` value.
+New or modified semantic rules MUST update the **Since** column in [Semantic.md](Semantic.md). Existing rules retain their original `Since` value.
 
 - New ERROR-severity rule — MINOR if validating previously undefined behavior; MAJOR if rejecting previously valid schemas
 - New WARNING/INFO-severity rule — MINOR
@@ -122,9 +122,25 @@ New or modified semantic rules MUST update the **Since** column in [schema.seman
 
 When a MAJOR version is released, the specification MUST include:
 
-1. A machine-readable migration manifest listing all breaking changes.
+1. A machine-readable migration manifest listing all breaking changes. The manifest MUST be a JSON document conforming to the following structure:
+    - `fromVersion` (SemVer) — source version
+    - `toVersion` (SemVer) — target version
+    - `changes` (array) — each entry with: `type` (`added` | `removed` | `changed` | `renamed`), `path` (JSON Pointer to affected location), `classification` (`online-safe` | `requires-maintenance-window`), `description` (human-readable summary)
 2. A human-readable migration guide with before/after examples.
 3. RECOMMENDED: An automated migration script.
+
+### Zero-Downtime Migration
+
+Migration manifests MUST classify each breaking change as:
+
+- **`online-safe`** — Can be applied without downtime (e.g., adding a new required property with a default).
+- **`requires-maintenance-window`** — Requires coordinated downtime (e.g., removing a property, changing types).
+
+The recommended migration pattern for `online-safe` changes is: expand (add new structure) → migrate data → contract (remove old structure). Runtimes SHOULD support reading both old and new schema structures during the transition window.
+
+### Rollback
+
+MINOR version rollbacks (removing newly-added optional features) MUST be supported without data loss. MAJOR version rollbacks SHOULD be addressed in migration manifests with a reverse migration path. Conformant runtimes SHOULD retain the previous schema version to enable rapid rollback.
 
 ---
 
