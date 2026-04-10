@@ -403,27 +403,31 @@ Applies to `table.formatRules` entries.
 
 ## Export Rules
 
-| ID      | Description                                                                  | Sev   | Since       |
-| ------- | ---------------------------------------------------------------------------- | ----- | ----------- |
-| EXP-001 | Export keys MUST be unique and valid `Identifier`                            | ERROR | 0.0.1-alpha |
-| EXP-002 | `files` export paths MUST start with `/`                                     | ERROR | 0.0.1-alpha |
-| EXP-003 | Path keys MUST be unique within export                                       | ERROR | 0.0.1-alpha |
-| EXP-004 | `files` table refs MUST exist                                                | ERROR | 0.0.1-alpha |
-| EXP-005 | `files` formats MUST be valid IANA MIME types with known extensions          | ERROR | 0.0.1-alpha |
-| EXP-006 | `files` filter MUST be valid JSON Logic with table field refs                | ERROR | 0.0.1-alpha |
-| EXP-007 | `encoding` MUST be allowed value; defaults to `utf-8`                        | ERROR | 0.0.1-alpha |
-| EXP-008 | `endpoint` MUST start with `/` and be non-empty                              | ERROR | 0.0.1-alpha |
-| EXP-009 | `graphql` tables non-empty; each key MUST reference existing table           | ERROR | 0.0.1-alpha |
-| EXP-010 | `odata` tables non-empty; `entitySetName`/`entityTypeName` valid identifiers | ERROR | 0.0.1-alpha |
-| EXP-011 | `sparql` tables non-empty; field mappings, `classUri`, templates valid       | ERROR | 0.0.1-alpha |
-| EXP-012 | `sparql` writes require `updateEndpoint` or default update path              | ERROR | 0.0.1-alpha |
-| EXP-013 | `soap` tables non-empty; valid identifiers, filter valid JSON Logic          | ERROR | 0.0.1-alpha |
-| EXP-014 | `soap` namespace MUST be valid URI; `serviceName` valid identifier           | ERROR | 0.0.1-alpha |
-| EXP-015 | `openapi` paths start with `/`; table refs valid                             | ERROR | 0.0.1-alpha |
-| EXP-016 | `openapi` response `fields`/`exclude` valid field IDs; no overlap            | ERROR | 0.0.1-alpha |
-| EXP-017 | `openapi` filter MUST be valid JSON Logic                                    | ERROR | 0.0.1-alpha |
-| EXP-018 | `openapi` `maxPageSize` ≥ `defaultPageSize`; `pageSize` ≤ `maxPageSize`      | ERROR | 0.0.1-alpha |
-| EXP-019 | `openapi` version valid; endpoint paths unique                               | ERROR | 0.0.1-alpha |
+| ID      | Description                                                                                     | Sev   | Since       |
+| ------- | ----------------------------------------------------------------------------------------------- | ----- | ----------- |
+| EXP-001 | Export keys MUST be unique and valid `Identifier`                                               | ERROR | 0.0.1-alpha |
+| EXP-002 | `files` export paths MUST start with `/`                                                        | ERROR | 0.0.1-alpha |
+| EXP-003 | Path keys MUST be unique within export                                                          | ERROR | 0.0.1-alpha |
+| EXP-004 | `files` table refs MUST exist                                                                   | ERROR | 0.0.1-alpha |
+| EXP-005 | `files` formats MUST be valid IANA MIME types with known extensions                             | ERROR | 0.0.1-alpha |
+| EXP-006 | `files` filter MUST be valid JSON Logic with table field refs                                   | ERROR | 0.0.1-alpha |
+| EXP-007 | `encoding` MUST be allowed value; defaults to `utf-8`                                           | ERROR | 0.0.1-alpha |
+| EXP-008 | `endpoint` MUST start with `/` and be non-empty                                                 | ERROR | 0.0.1-alpha |
+| EXP-009 | `graphql` tables non-empty; each key MUST reference existing table                              | ERROR | 0.0.1-alpha |
+| EXP-010 | `odata` tables non-empty; `entitySetName`/`entityTypeName` valid identifiers                    | ERROR | 0.0.1-alpha |
+| EXP-011 | `sparql` tables non-empty; field mappings, `classUri`, templates valid                          | ERROR | 0.0.1-alpha |
+| EXP-012 | `sparql` writes require `updateEndpoint` or default update path                                 | ERROR | 0.0.1-alpha |
+| EXP-013 | `soap` tables non-empty; valid identifiers, filter valid JSON Logic                             | ERROR | 0.0.1-alpha |
+| EXP-014 | `soap` namespace MUST be valid URI; `serviceName` valid identifier                              | ERROR | 0.0.1-alpha |
+| EXP-015 | `openapi` paths start with `/`; table refs valid                                                | ERROR | 0.0.1-alpha |
+| EXP-016 | `openapi` response `fields`/`exclude` valid field IDs; no overlap                               | ERROR | 0.0.1-alpha |
+| EXP-017 | `openapi` filter MUST be valid JSON Logic                                                       | ERROR | 0.0.1-alpha |
+| EXP-018 | `openapi` `maxPageSize` ≥ `defaultPageSize`; `pageSize` ≤ `maxPageSize`                         | ERROR | 0.0.1-alpha |
+| EXP-019 | `openapi` version valid; endpoint paths unique                                                  | ERROR | 0.0.1-alpha |
+| EXP-020 | `rss` export `table` MUST reference an existing table                                           | ERROR | 0.0.1-alpha |
+| EXP-021 | `rss` export all specified `fields.*` values MUST reference valid field IDs in the target table | ERROR | 0.0.1-alpha |
+| EXP-022 | `rss` export `sort.field` MUST reference a valid field ID in the target table                   | ERROR | 0.0.1-alpha |
+| EXP-023 | `rss` export enclosure: if `enclosureUrl` is set, `enclosureType` MUST also be set              | ERROR | 0.0.1-alpha |
 
 ---
 

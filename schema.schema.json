@@ -4730,7 +4730,7 @@
             "required": ["type"],
             "properties": {
                 "type": {
-                    "enum": ["graphql", "odata", "openapi", "sparql", "soap", "files", "other"]
+                    "enum": ["graphql", "odata", "openapi", "sparql", "soap", "files", "rss", "other"]
                 }
             },
             "allOf": [
@@ -4775,6 +4775,13 @@
                         "required": ["type"]
                     },
                     "then": { "$ref": "#/$defs/ExportFiles" }
+                },
+                {
+                    "if": {
+                        "properties": { "type": { "const": "rss" } },
+                        "required": ["type"]
+                    },
+                    "then": { "$ref": "#/$defs/ExportRSS" }
                 },
                 {
                     "if": {
@@ -5636,6 +5643,156 @@
                     "type": "integer",
                     "description": "Default page size for list operations on this resource. Overrides the export-level defaultPageSize.",
                     "minimum": 1
+                }
+            },
+            "patternProperties": { "^x-[a-zA-Z0-9][a-zA-Z0-9\/_.-]*$": {} }
+        },
+        "ExportRSS": {
+            "type": "object",
+            "description": "RSS/Atom feed export. Exposes a table as a feed.",
+            "required": ["type", "endpoint", "table", "fields"],
+            "properties": {
+                "type": {
+                    "const": "rss",
+                    "description": "RSS export type discriminator."
+                },
+                "endpoint": {
+                    "type": "string",
+                    "description": "Path at which the feed is served. MUST start with '/'.",
+                    "pattern": "^/",
+                    "examples": ["/feed", "/rss", "/feed.xml", "/atom.xml"]
+                },
+                "format": {
+                    "type": "string",
+                    "enum": ["rss", "atom"],
+                    "description": "Feed format.",
+                    "default": "rss"
+                },
+                "auth": {
+                    "$ref": "#/$defs/ExportAuth",
+                    "description": "Authentication configuration for clients consuming this export."
+                },
+                "channel": {
+                    "$ref": "#/$defs/ExportRSSChannel",
+                    "description": "Feed-level channel metadata."
+                },
+                "table": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "ID of the table whose rows are serialized as feed items."
+                },
+                "filter": {
+                    "$ref": "#/$defs/RowCondition",
+                    "description": "Optional JSON Logic filter. Only matching rows are included in the feed."
+                },
+                "sort": {
+                    "type": "object",
+                    "description": "Sort configuration for feed items.",
+                    "required": ["field"],
+                    "properties": {
+                        "field": {
+                            "$ref": "#/$defs/Identifier",
+                            "description": "Field ID to sort feed items by."
+                        },
+                        "dir": {
+                            "type": "string",
+                            "enum": ["asc", "desc"],
+                            "description": "Sort direction.",
+                            "default": "desc"
+                        }
+                    }
+                },
+                "maxItems": {
+                    "type": "integer",
+                    "description": "Maximum number of items to include in the feed.",
+                    "minimum": 1,
+                    "default": 20
+                },
+                "fields": {
+                    "$ref": "#/$defs/ExportRSSFieldMapping",
+                    "description": "Mapping from RSS/Atom item properties to table field IDs."
+                }
+            },
+            "patternProperties": { "^x-[a-zA-Z0-9][a-zA-Z0-9\/_.-]*$": {} }
+        },
+        "ExportRSSChannel": {
+            "type": "object",
+            "description": "Feed-level metadata for the exported RSS or Atom feed. When omitted, values default to application metadata.",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Feed title. Defaults to app.name when omitted.",
+                    "minLength": 1
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Feed description or subtitle. Defaults to app.description when omitted.",
+                    "minLength": 1
+                },
+                "link": {
+                    "$ref": "#/$defs/Url",
+                    "description": "Canonical URL of the website associated with the feed."
+                },
+                "language": {
+                    "$ref": "#/$defs/BCP47LanguageTag",
+                    "description": "BCP 47 language tag for the feed content."
+                },
+                "ttl": {
+                    "type": "integer",
+                    "description": "Time-to-live in minutes (RSS only). Indicates how long the feed may be cached.",
+                    "minimum": 0
+                },
+                "copyright": {
+                    "type": "string",
+                    "description": "Copyright notice for the feed content.",
+                    "minLength": 1
+                }
+            },
+            "patternProperties": { "^x-[a-zA-Z0-9][a-zA-Z0-9\/_.-]*$": {} }
+        },
+        "ExportRSSFieldMapping": {
+            "type": "object",
+            "description": "Mapping from RSS/Atom item properties to table field IDs. 'title' and 'link' are required; all others are optional.",
+            "required": ["title", "link"],
+            "properties": {
+                "title": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item title."
+                },
+                "link": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item URL."
+                },
+                "description": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item summary or content body."
+                },
+                "pubDate": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item publication date."
+                },
+                "guid": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item globally unique identifier. Defaults to 'link' when omitted."
+                },
+                "author": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item author name or email."
+                },
+                "category": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID whose value is used as the item category label."
+                },
+                "enclosureUrl": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID for the enclosure (attachment) URL. When set, 'enclosureType' MUST also be set."
+                },
+                "enclosureType": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID for the enclosure MIME type. Required when 'enclosureUrl' is set."
+                },
+                "enclosureLength": {
+                    "$ref": "#/$defs/Identifier",
+                    "description": "Field ID for the enclosure file size in bytes. Required when 'enclosureUrl' is set."
                 }
             },
             "patternProperties": { "^x-[a-zA-Z0-9][a-zA-Z0-9\/_.-]*$": {} }
