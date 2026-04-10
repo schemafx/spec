@@ -89,18 +89,18 @@ Applies when `table.concurrency` is present. Updates and deletes MUST include a 
 
 Applies to entries within `table.partitions`.
 
-| ID      | Description                                                                         | Sev   | Since       |
-| ------- | ----------------------------------------------------------------------------------- | ----- | ----------- |
-| PRT-001 | Partition IDs within a table MUST be unique                                         | ERROR | 0.0.1-alpha |
-| PRT-002 | `partition.condition` MUST be a valid `RowCondition` with valid field refs          | ERROR | 0.0.1-alpha |
-| PRT-003 | `partition.connector` (if specified) MUST reference an existing connector           | ERROR | 0.0.1-alpha |
-| PRT-004 | `partition.path` MUST follow connector path conventions (see TBL-011)               | ERROR | 0.0.1-alpha |
-| PRT-005 | Compound operators SHOULD be preferred for complex partitioning                     | INFO  | 0.0.1-alpha |
-| PRT-006 | On read: query matching partitions, union results, exclude matching main table rows | ERROR | 0.0.1-alpha |
-| PRT-007 | On create: route to first matching partition, else main table                       | ERROR | 0.0.1-alpha |
-| PRT-008 | On update/delete: locate record across all partitions and apply correctly           | ERROR | 0.0.1-alpha |
-| PRT-009 | Order: partition → tenancy → `table.filter` → `rowSecurity` → `view.filter`         | ERROR | 0.0.1-alpha |
-| PRT-010 | `partition.poll` precedence: partition > table > connector                          | ERROR | 0.0.1-alpha |
+| ID      | Description                                                                                      | Sev   | Since       |
+| ------- | ------------------------------------------------------------------------------------------------ | ----- | ----------- |
+| PRT-001 | Partition IDs within a table MUST be unique                                                      | ERROR | 0.0.1-alpha |
+| PRT-002 | `partition.condition` MUST be a valid `RowCondition` with valid field refs                       | ERROR | 0.0.1-alpha |
+| PRT-003 | `partition.connector` (if specified) MUST reference an existing connector                        | ERROR | 0.0.1-alpha |
+| PRT-004 | `partition.path` MUST follow connector path conventions (see TBL-011)                            | ERROR | 0.0.1-alpha |
+| PRT-005 | Compound operators SHOULD be preferred for complex partitioning                                  | INFO  | 0.0.1-alpha |
+| PRT-006 | On read: query matching partitions, union results, exclude matching main table rows              | ERROR | 0.0.1-alpha |
+| PRT-007 | On create: route to first matching partition, else main table                                    | ERROR | 0.0.1-alpha |
+| PRT-008 | On update/delete: locate record across all partitions and apply correctly                        | ERROR | 0.0.1-alpha |
+| PRT-009 | Order: partition → tenancy → `table.filter` → `rowSecurity` → `view.filter` / path param filters | ERROR | 0.0.1-alpha |
+| PRT-010 | `partition.poll` precedence: partition > table > connector                                       | ERROR | 0.0.1-alpha |
 
 ---
 
@@ -141,26 +141,31 @@ Applies to `table.formatRules` entries.
 
 ## View Rules
 
-| ID      | Description                                                                                        | Sev     | Since       |
-| ------- | -------------------------------------------------------------------------------------------------- | ------- | ----------- |
-| VIW-001 | View keys MUST be unique                                                                           | ERROR   | 0.0.1-alpha |
-| VIW-002 | `view.table` MUST reference existing table                                                         | ERROR   | 0.0.1-alpha |
-| VIW-003 | Table view fields MUST reference valid field IDs                                                   | ERROR   | 0.0.1-alpha |
-| VIW-004 | Form view fields MUST reference valid field IDs                                                    | ERROR   | 0.0.1-alpha |
-| VIW-005 | Detail view fields MUST reference valid field IDs                                                  | ERROR   | 0.0.1-alpha |
-| VIW-006 | Dashboard section `viewIds` MUST reference existing views                                          | ERROR   | 0.0.1-alpha |
-| VIW-007 | Group view `viewIds` MUST reference existing views                                                 | ERROR   | 0.0.1-alpha |
-| VIW-008 | `view.interactions` action IDs MUST resolve to valid actions in view's table                       | ERROR   | 0.0.1-alpha |
-| VIW-009 | Dashboard and group views MUST NOT have circular view references                                   | ERROR   | 0.0.1-alpha |
-| VIW-010 | Views without table reference MUST NOT have `interactions`                                         | ERROR   | 0.0.1-alpha |
-| VIW-011 | `other` views: `name` MUST be non-empty (OPTIONAL support)                                         | WARNING | 0.0.1-alpha |
-| VIW-012 | Vega views: exactly one of `spec` or `specUrl` required                                            | ERROR   | 0.0.1-alpha |
-| VIW-013 | Vega views: `table` MUST exist; `signals` keys MUST match spec signal names                        | ERROR   | 0.0.1-alpha |
-| VIW-014 | `view.filter` MUST be valid `RowCondition`, applied after `table.filter`; requires table reference | ERROR   | 0.0.1-alpha |
-| VIW-015 | `view.accessible` condition controls navigation visibility; defaults to `true`                     | ERROR   | 0.0.1-alpha |
-| VIW-016 | `view.position` MUST be non-empty array of unique strings                                          | WARNING | 0.0.1-alpha |
-| VIW-017 | `view.accessible` condition evaluation errors MUST be treated as falsy (deny access)               | ERROR   | 0.0.1-alpha |
-| VIW-018 | Dashboard/group views MUST omit embedded views where `accessible` evaluates falsy                  | ERROR   | 0.0.1-alpha |
+| ID      | Description                                                                                                                                                                                       | Sev     | Since       |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- |
+| VIW-001 | View keys MUST be unique                                                                                                                                                                          | ERROR   | 0.0.1-alpha |
+| VIW-002 | `view.table` MUST reference existing table                                                                                                                                                        | ERROR   | 0.0.1-alpha |
+| VIW-003 | Table view fields MUST reference valid field IDs                                                                                                                                                  | ERROR   | 0.0.1-alpha |
+| VIW-004 | Form view fields MUST reference valid field IDs                                                                                                                                                   | ERROR   | 0.0.1-alpha |
+| VIW-005 | Detail view fields MUST reference valid field IDs                                                                                                                                                 | ERROR   | 0.0.1-alpha |
+| VIW-006 | Dashboard section `viewIds` MUST reference existing views                                                                                                                                         | ERROR   | 0.0.1-alpha |
+| VIW-007 | Group view `viewIds` MUST reference existing views                                                                                                                                                | ERROR   | 0.0.1-alpha |
+| VIW-008 | `view.interactions` action IDs MUST resolve to valid actions in view's table                                                                                                                      | ERROR   | 0.0.1-alpha |
+| VIW-009 | Dashboard and group views MUST NOT have circular view references                                                                                                                                  | ERROR   | 0.0.1-alpha |
+| VIW-010 | Views without table reference MUST NOT have `interactions`                                                                                                                                        | ERROR   | 0.0.1-alpha |
+| VIW-011 | `other` views: `name` MUST be non-empty (OPTIONAL support)                                                                                                                                        | WARNING | 0.0.1-alpha |
+| VIW-012 | Vega views: exactly one of `spec` or `specUrl` required                                                                                                                                           | ERROR   | 0.0.1-alpha |
+| VIW-013 | Vega views: `table` MUST exist; `signals` keys MUST match spec signal names                                                                                                                       | ERROR   | 0.0.1-alpha |
+| VIW-014 | `view.filter` MUST be valid `RowCondition`, applied after `table.filter`; requires table reference                                                                                                | ERROR   | 0.0.1-alpha |
+| VIW-015 | `view.accessible` condition controls navigation visibility; defaults to `true`                                                                                                                    | ERROR   | 0.0.1-alpha |
+| VIW-016 | `view.position` MUST be non-empty array of unique strings                                                                                                                                         | WARNING | 0.0.1-alpha |
+| VIW-017 | `view.accessible` condition evaluation errors MUST be treated as falsy (deny access)                                                                                                              | ERROR   | 0.0.1-alpha |
+| VIW-018 | Dashboard/group views MUST omit embedded views where `accessible` evaluates falsy                                                                                                                 | ERROR   | 0.0.1-alpha |
+| VIW-019 | `view.path` MUST start with `/` and contain only valid static segments or `{fieldId}` parameters                                                                                                  | ERROR   | 0.0.1-alpha |
+| VIW-020 | `view.path` parameter names MUST reference valid field IDs in the view's table                                                                                                                    | ERROR   | 0.0.1-alpha |
+| VIW-021 | `view.path` with parameters MUST have a `view.table` reference                                                                                                                                    | ERROR   | 0.0.1-alpha |
+| VIW-022 | `view.path` patterns MUST NOT overlap: two paths overlap when they have the same segment count and every corresponding position is either two identical static segments or at least one parameter | ERROR   | 0.0.1-alpha |
+| VIW-023 | `view.path` parameter fields MUST be of type `string`, `integer`, or `reference`                                                                                                                  | ERROR   | 0.0.1-alpha |
 
 ---
 

@@ -2285,6 +2285,12 @@
                     "items": { "type": "string" },
                     "minItems": 1,
                     "uniqueItems": true
+                },
+                "path": {
+                    "type": "string",
+                    "description": "Application URL path pattern for this view. Static segments are literal path parts; dynamic segments use {fieldId} notation to bind a path parameter to a table field. When a path parameter is present in the URL, the view is filtered to rows where the referenced field equals the parameter value.",
+                    "pattern": "^(/([a-zA-Z][a-zA-Z0-9_-]*|\\{[a-zA-Z][a-zA-Z0-9_-]*\\}))+$",
+                    "examples": ["/orders", "/orders/{orderId}", "/customers/{customerId}/orders"]
                 }
             },
             "patternProperties": { "^x-[a-zA-Z0-9][a-zA-Z0-9\/_.-]*$": {} }
