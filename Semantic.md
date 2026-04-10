@@ -18,33 +18,38 @@ Rule tables include a **Since** column for the version in which the rule was int
 | Security              | Access constraints enforced before observation   | Runtime    |
 | Tenancy               | Multi-tenant isolation on table data             | 3, Runtime |
 | Partitioning          | Partition routing and condition validation       | 3, Runtime |
+| Internationalization  | Locale configuration and string resolution       | 2, Runtime |
+| Application           | Top-level application configuration constraints  | 2, Runtime |
 
 ---
 
 ## Connector Rules
 
-| ID      | Description                                                                                        | Sev     | Since       |
-| ------- | -------------------------------------------------------------------------------------------------- | ------- | ----------- |
-| CON-001 | Connector keys MUST be unique                                                                      | ERROR   | 0.0.1-alpha |
-| CON-002 | `auth` with `SecretRef` values requires registered `provider`                                      | ERROR   | 0.0.1-alpha |
-| CON-003 | `config.type` MUST be a registered connector handler                                               | ERROR   | 0.0.1-alpha |
-| CON-004 | `sql` connectors: `dialect` MUST be supported, `uri` MUST be present without scheme or credentials | ERROR   | 0.0.1-alpha |
-| CON-005 | Plaintext secrets SHOULD use `SecretRef`                                                           | WARNING | 0.0.1-alpha |
-| CON-006 | `openapi` connectors: `tables` required with operation bindings                                    | ERROR   | 0.0.1-alpha |
-| CON-007 | `other` connectors: `name` MUST be non-empty (OPTIONAL support)                                    | WARNING | 0.0.1-alpha |
-| CON-008 | `poll.interval` MUST be valid ISO 8601 duration, non-zero positive                                 | ERROR   | 0.0.1-alpha |
-| CON-009 | `oauth2`: `serviceAccountEmail` and `privateKey` MUST both be present or absent                    | ERROR   | 0.0.1-alpha |
-| CON-010 | `oauth2`: `impersonateUser` requires service account credentials                                   | ERROR   | 0.0.1-alpha |
-| CON-011 | `rss` connectors: `feedUrl` MUST be valid URL; read-only                                           | ERROR   | 0.0.1-alpha |
-| CON-012 | `sparql` connectors: table entries, field mappings, `classUri` MUST be valid                       | ERROR   | 0.0.1-alpha |
-| CON-013 | `sparql`: unmapped tables rely on inference (NOT RECOMMENDED)                                      | WARNING | 0.0.1-alpha |
-| CON-014 | `soap` connectors: `tables` required with valid table references                                   | ERROR   | 0.0.1-alpha |
-| CON-015 | `resultPath` MUST be valid JSONPath (RFC 9535) starting with `$`                                   | ERROR   | 0.0.1-alpha |
-| CON-016 | `graphql` connectors: valid table refs, `operation` non-empty                                      | ERROR   | 0.0.1-alpha |
-| CON-017 | `graphql`: unmapped tables rely on inference (NOT RECOMMENDED)                                     | WARNING | 0.0.1-alpha |
-| CON-018 | `odata` connectors: table refs valid, `entitySet` non-empty                                        | ERROR   | 0.0.1-alpha |
-| CON-019 | `odata`: unmapped tables rely on inference (NOT RECOMMENDED)                                       | WARNING | 0.0.1-alpha |
-| CON-020 | `rss`: field mappings valid, `itemPath` MUST be valid JSONPath                                     | ERROR   | 0.0.1-alpha |
+| ID      | Description                                                                                                             | Sev     | Since       |
+| ------- | ----------------------------------------------------------------------------------------------------------------------- | ------- | ----------- |
+| CON-001 | Connector keys MUST be unique                                                                                           | ERROR   | 0.0.1-alpha |
+| CON-002 | `auth` with `SecretRef` values requires registered `provider`                                                           | ERROR   | 0.0.1-alpha |
+| CON-003 | `config.type` MUST be a registered connector handler                                                                    | ERROR   | 0.0.1-alpha |
+| CON-004 | `sql` connectors: `dialect` MUST be supported, `uri` MUST be present without scheme or credentials                      | ERROR   | 0.0.1-alpha |
+| CON-005 | Plaintext secrets SHOULD use `SecretRef`                                                                                | WARNING | 0.0.1-alpha |
+| CON-006 | `openapi` connectors: `tables` required with operation bindings                                                         | ERROR   | 0.0.1-alpha |
+| CON-007 | `other` connectors: `name` MUST be non-empty (OPTIONAL support)                                                         | WARNING | 0.0.1-alpha |
+| CON-008 | `poll.interval` MUST be valid ISO 8601 duration, non-zero positive                                                      | ERROR   | 0.0.1-alpha |
+| CON-009 | `oauth2`: `serviceAccountEmail` and `privateKey` MUST both be present or absent                                         | ERROR   | 0.0.1-alpha |
+| CON-010 | `oauth2`: `impersonateUser` requires service account credentials                                                        | ERROR   | 0.0.1-alpha |
+| CON-011 | `rss` connectors: `feedUrl` MUST be valid URL; read-only                                                                | ERROR   | 0.0.1-alpha |
+| CON-012 | `sparql` connectors: table entries, field mappings, `classUri` MUST be valid                                            | ERROR   | 0.0.1-alpha |
+| CON-013 | `sparql`: unmapped tables rely on inference (NOT RECOMMENDED)                                                           | WARNING | 0.0.1-alpha |
+| CON-014 | `soap` connectors: `tables` required with valid table references                                                        | ERROR   | 0.0.1-alpha |
+| CON-015 | `resultPath` MUST be valid JSONPath (RFC 9535) starting with `$`                                                        | ERROR   | 0.0.1-alpha |
+| CON-016 | `graphql` connectors: valid table refs, `operation` non-empty                                                           | ERROR   | 0.0.1-alpha |
+| CON-017 | `graphql`: unmapped tables rely on inference (NOT RECOMMENDED)                                                          | WARNING | 0.0.1-alpha |
+| CON-018 | `odata` connectors: table refs valid, `entitySet` non-empty                                                             | ERROR   | 0.0.1-alpha |
+| CON-019 | `odata`: unmapped tables rely on inference (NOT RECOMMENDED)                                                            | WARNING | 0.0.1-alpha |
+| CON-020 | `rss`: field mappings valid, `itemPath` MUST be valid JSONPath                                                          | ERROR   | 0.0.1-alpha |
+| CON-021 | HTTP-based connectors MUST support configurable connection and request timeout                                          | ERROR   | 0.0.1-alpha |
+| CON-022 | SQL connectors MUST use parameterized queries; string concatenation of user values is forbidden                         | ERROR   | 0.0.1-alpha |
+| CON-023 | All outbound connector URLs (`endpoint`, `rootEndpoint`, `jwksUrl`, etc.) MUST be subject to SSRF validation at runtime | ERROR   | 0.0.1-alpha |
 
 ---
 
@@ -94,7 +99,7 @@ Applies to entries within `table.partitions`.
 | PRT-006 | On read: query matching partitions, union results, exclude matching main table rows | ERROR | 0.0.1-alpha |
 | PRT-007 | On create: route to first matching partition, else main table                       | ERROR | 0.0.1-alpha |
 | PRT-008 | On update/delete: locate record across all partitions and apply correctly           | ERROR | 0.0.1-alpha |
-| PRT-009 | Order: partition → tenancy → filter                                                 | ERROR | 0.0.1-alpha |
+| PRT-009 | Order: partition → tenancy → `table.filter` → `rowSecurity` → `view.filter`         | ERROR | 0.0.1-alpha |
 | PRT-010 | `partition.poll` precedence: partition > table > connector                          | ERROR | 0.0.1-alpha |
 
 ---
@@ -154,89 +159,93 @@ Applies to `table.formatRules` entries.
 | VIW-014 | `view.filter` MUST be valid `RowCondition`, applied after `table.filter`; requires table reference | ERROR   | 0.0.1-alpha |
 | VIW-015 | `view.accessible` condition controls navigation visibility; defaults to `true`                     | ERROR   | 0.0.1-alpha |
 | VIW-016 | `view.position` MUST be non-empty array of unique strings                                          | WARNING | 0.0.1-alpha |
+| VIW-017 | `view.accessible` condition evaluation errors MUST be treated as falsy (deny access)               | ERROR   | 0.0.1-alpha |
+| VIW-018 | Dashboard/group views MUST omit embedded views where `accessible` evaluates falsy                  | ERROR   | 0.0.1-alpha |
 
 ---
 
 ## Workflow Rules
 
-| ID      | Description                                                                                                                               | Sev     | Since       |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- |
-| WFL-001 | Workflow keys MUST be unique                                                                                                              | ERROR   | 0.0.1-alpha |
-| WFL-002 | Data trigger `config.table` MUST reference existing table                                                                                 | ERROR   | 0.0.1-alpha |
-| WFL-003 | Manual trigger `config.table` MUST reference existing table                                                                               | ERROR   | 0.0.1-alpha |
-| WFL-004 | Schedule trigger `config.interval` MUST be valid ISO 8601 duration                                                                        | ERROR   | 0.0.1-alpha |
-| WFL-005 | `run_action` step `config.table` MUST reference existing table                                                                            | ERROR   | 0.0.1-alpha |
-| WFL-006 | `run_action` step `config.action` MUST reference valid action                                                                             | ERROR   | 0.0.1-alpha |
-| WFL-007 | `run_operation` step `config.connector` MUST reference existing connector                                                                 | ERROR   | 0.0.1-alpha |
-| WFL-008 | `run_operation` step `config.operationId` MUST be non-empty                                                                               | ERROR   | 0.0.1-alpha |
-| WFL-009 | `other` triggers: `name` MUST be non-empty (OPTIONAL support)                                                                             | WARNING | 0.0.1-alpha |
-| WFL-010 | `run_workflow` step: `config.workflow` MUST exist; circular invocations rejected                                                          | ERROR   | 0.0.1-alpha |
-| WFL-011 | `other` actions: `name` MUST be non-empty (OPTIONAL support)                                                                              | WARNING | 0.0.1-alpha |
-| WFL-012 | Condition steps: `config.condition` valid, `config.then` non-empty, nested IDs unique                                                     | ERROR   | 0.0.1-alpha |
-| WFL-013 | Switch steps: `config.expression` valid, cases non-empty with unique primitives, nested IDs unique                                        | ERROR   | 0.0.1-alpha |
-| WFL-014 | ForEach steps: `config.items` evaluates to array, `config.as` valid identifier, nested IDs unique                                         | ERROR   | 0.0.1-alpha |
-| WFL-015 | Parallel steps: 2+ branches, unique branch IDs, unique nested action IDs                                                                  | ERROR   | 0.0.1-alpha |
-| WFL-016 | Retry policies: `maxAttempts` 1–10, `delay` valid duration, `backoff` valid strategy                                                      | ERROR   | 0.0.1-alpha |
-| WFL-017 | Error handlers: `strategy` valid; `goto` target MUST reference valid action ID                                                            | ERROR   | 0.0.1-alpha |
-| WFL-018 | Error handler `goto` MUST reference forward action only                                                                                   | ERROR   | 0.0.1-alpha |
-| WFL-019 | Workflow action IDs MUST be globally unique across entire tree                                                                            | ERROR   | 0.0.1-alpha |
-| WFL-020 | Workflow `maxInstances` positive integer; `onLimit` valid strategy                                                                        | ERROR   | 0.0.1-alpha |
-| WFL-021 | Trigger `maxConcurrent` positive integer; `onLimit` valid strategy                                                                        | ERROR   | 0.0.1-alpha |
-| WFL-022 | Callback steps: valid URL, allowed method, `secretHeaders` as `SecretRef`                                                                 | ERROR   | 0.0.1-alpha |
-| WFL-023 | `workflow.accessible` condition controls triggerability; defaults to `true`                                                               | ERROR   | 0.0.1-alpha |
-| WFL-024 | HTTP callback URLs MUST NOT resolve to private/reserved IPs. DNS resolution required before connecting (see runtime spec SSRF Protection) | ERROR   | 0.0.1-alpha |
+| ID      | Description                                                                                                                                   | Sev     | Since       |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- |
+| WFL-001 | Workflow keys MUST be unique                                                                                                                  | ERROR   | 0.0.1-alpha |
+| WFL-002 | Data trigger `config.table` MUST reference existing table                                                                                     | ERROR   | 0.0.1-alpha |
+| WFL-003 | Manual trigger `config.table` MUST reference existing table                                                                                   | ERROR   | 0.0.1-alpha |
+| WFL-004 | Schedule trigger `config.interval` MUST be valid ISO 8601 duration                                                                            | ERROR   | 0.0.1-alpha |
+| WFL-005 | `run_action` step `config.table` MUST reference existing table                                                                                | ERROR   | 0.0.1-alpha |
+| WFL-006 | `run_action` step `config.action` MUST reference valid action                                                                                 | ERROR   | 0.0.1-alpha |
+| WFL-007 | `run_operation` step `config.connector` MUST reference existing connector                                                                     | ERROR   | 0.0.1-alpha |
+| WFL-008 | `run_operation` step `config.operationId` MUST be non-empty                                                                                   | ERROR   | 0.0.1-alpha |
+| WFL-009 | `other` triggers: `name` MUST be non-empty (OPTIONAL support)                                                                                 | WARNING | 0.0.1-alpha |
+| WFL-010 | `run_workflow` step: `config.workflow` MUST exist; circular invocations rejected                                                              | ERROR   | 0.0.1-alpha |
+| WFL-011 | `other` actions: `name` MUST be non-empty (OPTIONAL support)                                                                                  | WARNING | 0.0.1-alpha |
+| WFL-012 | Condition steps: `config.condition` valid, `config.then` non-empty, nested IDs unique                                                         | ERROR   | 0.0.1-alpha |
+| WFL-013 | Switch steps: `config.expression` valid, cases non-empty with unique primitives, nested IDs unique                                            | ERROR   | 0.0.1-alpha |
+| WFL-014 | ForEach steps: `config.items` evaluates to array, `config.as` valid identifier, nested IDs unique                                             | ERROR   | 0.0.1-alpha |
+| WFL-015 | Parallel steps: 2+ branches, unique branch IDs, unique nested action IDs                                                                      | ERROR   | 0.0.1-alpha |
+| WFL-016 | Retry policies: `maxAttempts` 1–10, `delay` valid duration, `backoff` valid strategy                                                          | ERROR   | 0.0.1-alpha |
+| WFL-017 | Error handlers: `strategy` valid; `goto` target MUST reference valid action ID                                                                | ERROR   | 0.0.1-alpha |
+| WFL-018 | Error handler `goto` MUST reference forward action only                                                                                       | ERROR   | 0.0.1-alpha |
+| WFL-019 | Workflow action IDs MUST be globally unique across entire tree                                                                                | ERROR   | 0.0.1-alpha |
+| WFL-020 | Workflow `maxInstances` positive integer; `onLimit` valid strategy                                                                            | ERROR   | 0.0.1-alpha |
+| WFL-021 | Trigger `maxConcurrent` positive integer; `onLimit` valid strategy                                                                            | ERROR   | 0.0.1-alpha |
+| WFL-022 | Callback steps: valid URL, allowed method, `secretHeaders` as `SecretRef`                                                                     | ERROR   | 0.0.1-alpha |
+| WFL-023 | `workflow.accessible` condition controls triggerability; defaults to `true`                                                                   | ERROR   | 0.0.1-alpha |
+| WFL-024 | HTTP callback URLs MUST NOT resolve to private/reserved IPs. DNS resolution required before connecting (see runtime spec SSRF Protection)     | ERROR   | 0.0.1-alpha |
+| WFL-025 | `workflow.transaction: "all_or_nothing"` MUST NOT span actions targeting different connectors; use `compensate` for cross-connector workflows | ERROR   | 0.0.1-alpha |
 
 ---
 
 ## Audit Rules
 
-| ID      | Description                                                                     | Sev   | Since       |
-| ------- | ------------------------------------------------------------------------------- | ----- | ----------- |
-| AUD-001 | `audit.destinationTable` MUST reference existing table                          | ERROR | 0.0.1-alpha |
-| AUD-002 | Destination table MUST have: `action`, `entity_table`, `entity_id`, `timestamp` | ERROR | 0.0.1-alpha |
-| AUD-003 | `captureState` `before`/`both`: destination MUST have `before_state` field      | ERROR | 0.0.1-alpha |
-| AUD-004 | `captureState` `after`/`both`: destination MUST have `after_state` field        | ERROR | 0.0.1-alpha |
-| AUD-005 | `audit.fields` MUST reference valid field IDs                                   | ERROR | 0.0.1-alpha |
-| AUD-006 | `audit.condition` MUST be valid `RowCondition`                                  | ERROR | 0.0.1-alpha |
-| AUD-007 | `audit.destinationTable` MUST NOT reference containing table                    | ERROR | 0.0.1-alpha |
-| AUD-008 | Circular audit chains rejected                                                  | ERROR | 0.0.1-alpha |
+| ID      | Description                                                                                            | Sev     | Since       |
+| ------- | ------------------------------------------------------------------------------------------------------ | ------- | ----------- |
+| AUD-001 | `audit.destinationTable` MUST reference existing table                                                 | ERROR   | 0.0.1-alpha |
+| AUD-002 | Destination table MUST have: `action`, `entity_table`, `entity_id`, `timestamp`                        | ERROR   | 0.0.1-alpha |
+| AUD-003 | `captureState` `before`/`both`: destination MUST have `before_state` field                             | ERROR   | 0.0.1-alpha |
+| AUD-004 | `captureState` `after`/`both`: destination MUST have `after_state` field                               | ERROR   | 0.0.1-alpha |
+| AUD-005 | `audit.fields` MUST reference valid field IDs                                                          | ERROR   | 0.0.1-alpha |
+| AUD-006 | `audit.condition` MUST be valid `RowCondition`                                                         | ERROR   | 0.0.1-alpha |
+| AUD-007 | `audit.destinationTable` MUST NOT reference containing table                                           | ERROR   | 0.0.1-alpha |
+| AUD-008 | Circular audit chains rejected                                                                         | ERROR   | 0.0.1-alpha |
+| AUD-009 | Audit destination tables SHOULD be append-only; `update` and `delete` on audit records NOT RECOMMENDED | WARNING | 0.0.1-alpha |
 
 ---
 
 ## Auth Rules
 
-| ID       | Description                                                                                                | Sev     | Since       |
-| -------- | ---------------------------------------------------------------------------------------------------------- | ------- | ----------- |
-| AUTH-001 | `auth.userTable` MUST exist and contain all `userFields`                                                   | ERROR   | 0.0.1-alpha |
-| AUTH-002 | `userFields.identifier` MUST exist; SHOULD be unique                                                       | ERROR   | 0.0.1-alpha |
-| AUTH-003 | Password auth: `userFields.passwordHash` required as string                                                | ERROR   | 0.0.1-alpha |
-| AUTH-004 | Password auth: at least one algorithm required                                                             | ERROR   | 0.0.1-alpha |
-| AUTH-005 | JWT auth: `algorithms` required; asymmetric with `jwksUrl`, HMAC with `secret`                             | WARNING | 0.0.1-alpha |
-| AUTH-006 | LDAP auth: `userFilter` MUST contain `{{username}}` placeholder                                            | ERROR   | 0.0.1-alpha |
-| AUTH-007 | OIDC/SAML: `autoProvision` requires `identifier` in claim/attribute mappings                               | ERROR   | 0.0.1-alpha |
-| AUTH-008 | API key auth: `expiresAt` field MUST be datetime                                                           | ERROR   | 0.0.1-alpha |
-| AUTH-009 | FIDO2: `credentialTable` MUST exist with mapped fields                                                     | ERROR   | 0.0.1-alpha |
-| AUTH-010 | SMS OTP: `phoneField` MUST reference valid userTable field                                                 | ERROR   | 0.0.1-alpha |
-| AUTH-011 | Email OTP: `emailField` MUST reference valid userTable field                                               | ERROR   | 0.0.1-alpha |
-| AUTH-012 | Auth method types SHOULD not be duplicated                                                                 | WARNING | 0.0.1-alpha |
-| AUTH-013 | MFA factor types MUST be declared in `auth.methods`                                                        | ERROR   | 0.0.1-alpha |
-| AUTH-014 | Stateful session mode: `auth.session.table` required                                                       | ERROR   | 0.0.1-alpha |
-| AUTH-015 | `refreshTokenRotation` requires `refreshable: true`                                                        | ERROR   | 0.0.1-alpha |
-| AUTH-016 | `auth.audit` destination MUST satisfy AUD-002–AUD-004                                                      | ERROR   | 0.0.1-alpha |
-| AUTH-017 | Email recovery requires email field via `userFields`                                                       | ERROR   | 0.0.1-alpha |
-| AUTH-018 | Session identifier MUST be regenerated after auth (session fixation)                                       | ERROR   | 0.0.1-alpha |
-| AUTH-019 | Lockout MUST NOT reveal account existence                                                                  | ERROR   | 0.0.1-alpha |
-| AUTH-020 | `auth.mfa.enforce.condition` MUST be valid with userTable field refs                                       | ERROR   | 0.0.1-alpha |
-| AUTH-021 | `userFields.role` MUST exist in userTable                                                                  | ERROR   | 0.0.1-alpha |
-| AUTH-022 | Role IDs MUST be unique in `auth.rbac.roles`                                                               | ERROR   | 0.0.1-alpha |
-| AUTH-023 | Declared roles without `userFields.role` SHOULD warn                                                       | WARNING | 0.0.1-alpha |
-| AUTH-024 | `rbac.defaultRole` MUST match existing role ID                                                             | ERROR   | 0.0.1-alpha |
-| AUTH-025 | `registration.defaultRole` MUST match existing role ID                                                     | ERROR   | 0.0.1-alpha |
-| AUTH-026 | Role `inherits` MUST reference existing roles; circular chains rejected                                    | ERROR   | 0.0.1-alpha |
-| AUTH-027 | Federated role mapping with `autoProvision` requires `userFields.role`                                     | ERROR   | 0.0.1-alpha |
-| AUTH-028 | Password `algorithm` MUST be `bcrypt` or `argon2`. Weaker algorithms (scrypt, md5, sha\*) MUST be rejected | ERROR   | 0.0.1-alpha |
-| AUTH-029 | LDAP `userFilter` MUST apply RFC 4515 escaping to `{{username}}` before constructing the filter            | ERROR   | 0.0.1-alpha |
-| AUTH-030 | OAuth2 JWT Bearer: MUST validate `iss`, `aud`, `exp` claims. Key rotation SHOULD be supported              | ERROR   | 0.0.1-alpha |
+| ID       | Description                                                                                                                            | Sev     | Since       |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- |
+| AUTH-001 | `auth.userTable` MUST exist and contain all `userFields`                                                                               | ERROR   | 0.0.1-alpha |
+| AUTH-002 | `userFields.identifier` MUST exist; SHOULD be unique                                                                                   | ERROR   | 0.0.1-alpha |
+| AUTH-003 | Password auth: `userFields.passwordHash` required as string                                                                            | ERROR   | 0.0.1-alpha |
+| AUTH-004 | Password auth: at least one algorithm required                                                                                         | ERROR   | 0.0.1-alpha |
+| AUTH-005 | JWT auth: `algorithms` required; asymmetric with `jwksUrl`, HMAC with `secret`                                                         | WARNING | 0.0.1-alpha |
+| AUTH-006 | LDAP auth: `userFilter` MUST contain `{{username}}` placeholder                                                                        | ERROR   | 0.0.1-alpha |
+| AUTH-007 | OIDC/SAML: `autoProvision` requires `identifier` in claim/attribute mappings                                                           | ERROR   | 0.0.1-alpha |
+| AUTH-008 | API key auth: `expiresAt` field MUST be datetime                                                                                       | ERROR   | 0.0.1-alpha |
+| AUTH-009 | FIDO2: `credentialTable` MUST exist with mapped fields                                                                                 | ERROR   | 0.0.1-alpha |
+| AUTH-010 | SMS OTP: `phoneField` MUST reference valid userTable field                                                                             | ERROR   | 0.0.1-alpha |
+| AUTH-011 | Email OTP: `emailField` MUST reference valid userTable field                                                                           | ERROR   | 0.0.1-alpha |
+| AUTH-012 | Auth method types SHOULD not be duplicated                                                                                             | WARNING | 0.0.1-alpha |
+| AUTH-013 | MFA factor types MUST be declared in `auth.methods`                                                                                    | ERROR   | 0.0.1-alpha |
+| AUTH-014 | Stateful session mode: `auth.session.table` required                                                                                   | ERROR   | 0.0.1-alpha |
+| AUTH-015 | `refreshTokenRotation` requires `refreshable: true`                                                                                    | ERROR   | 0.0.1-alpha |
+| AUTH-016 | `auth.audit` destination MUST satisfy AUD-002–AUD-004                                                                                  | ERROR   | 0.0.1-alpha |
+| AUTH-017 | Email recovery requires email field via `userFields`                                                                                   | ERROR   | 0.0.1-alpha |
+| AUTH-018 | Stateful session identifier MUST be regenerated after auth (session fixation); stateless JWT MUST be freshly issued per authentication | ERROR   | 0.0.1-alpha |
+| AUTH-019 | Lockout MUST NOT reveal account existence                                                                                              | ERROR   | 0.0.1-alpha |
+| AUTH-020 | `auth.mfa.enforce.condition` MUST be valid with userTable field refs                                                                   | ERROR   | 0.0.1-alpha |
+| AUTH-021 | `userFields.role` MUST exist in userTable                                                                                              | ERROR   | 0.0.1-alpha |
+| AUTH-022 | Role IDs MUST be unique in `auth.rbac.roles`                                                                                           | ERROR   | 0.0.1-alpha |
+| AUTH-023 | Declared roles without `userFields.role` SHOULD warn                                                                                   | WARNING | 0.0.1-alpha |
+| AUTH-024 | `rbac.defaultRole` MUST match existing role ID                                                                                         | ERROR   | 0.0.1-alpha |
+| AUTH-025 | `registration.defaultRole` MUST match existing role ID                                                                                 | ERROR   | 0.0.1-alpha |
+| AUTH-026 | Role `inherits` MUST reference existing roles; circular chains rejected                                                                | ERROR   | 0.0.1-alpha |
+| AUTH-027 | Federated role mapping with `autoProvision` requires `userFields.role`                                                                 | ERROR   | 0.0.1-alpha |
+| AUTH-028 | Password `algorithm` MUST be `bcrypt` or `argon2`. Weaker algorithms (scrypt, md5, sha\*) MUST be rejected                             | ERROR   | 0.0.1-alpha |
+| AUTH-029 | LDAP `userFilter` MUST apply RFC 4515 escaping to `{{username}}` before constructing the filter                                        | ERROR   | 0.0.1-alpha |
+| AUTH-030 | OAuth2 JWT Bearer: MUST validate `iss`, `aud`, `exp` claims. Key rotation SHOULD be supported                                          | ERROR   | 0.0.1-alpha |
 
 ---
 
@@ -403,31 +412,33 @@ Applies to `table.formatRules` entries.
 
 ## Export Rules
 
-| ID      | Description                                                                                     | Sev   | Since       |
-| ------- | ----------------------------------------------------------------------------------------------- | ----- | ----------- |
-| EXP-001 | Export keys MUST be unique and valid `Identifier`                                               | ERROR | 0.0.1-alpha |
-| EXP-002 | `files` export paths MUST start with `/`                                                        | ERROR | 0.0.1-alpha |
-| EXP-003 | Path keys MUST be unique within export                                                          | ERROR | 0.0.1-alpha |
-| EXP-004 | `files` table refs MUST exist                                                                   | ERROR | 0.0.1-alpha |
-| EXP-005 | `files` formats MUST be valid IANA MIME types with known extensions                             | ERROR | 0.0.1-alpha |
-| EXP-006 | `files` filter MUST be valid JSON Logic with table field refs                                   | ERROR | 0.0.1-alpha |
-| EXP-007 | `encoding` MUST be allowed value; defaults to `utf-8`                                           | ERROR | 0.0.1-alpha |
-| EXP-008 | `endpoint` MUST start with `/` and be non-empty                                                 | ERROR | 0.0.1-alpha |
-| EXP-009 | `graphql` tables non-empty; each key MUST reference existing table                              | ERROR | 0.0.1-alpha |
-| EXP-010 | `odata` tables non-empty; `entitySetName`/`entityTypeName` valid identifiers                    | ERROR | 0.0.1-alpha |
-| EXP-011 | `sparql` tables non-empty; field mappings, `classUri`, templates valid                          | ERROR | 0.0.1-alpha |
-| EXP-012 | `sparql` writes require `updateEndpoint` or default update path                                 | ERROR | 0.0.1-alpha |
-| EXP-013 | `soap` tables non-empty; valid identifiers, filter valid JSON Logic                             | ERROR | 0.0.1-alpha |
-| EXP-014 | `soap` namespace MUST be valid URI; `serviceName` valid identifier                              | ERROR | 0.0.1-alpha |
-| EXP-015 | `openapi` paths start with `/`; table refs valid                                                | ERROR | 0.0.1-alpha |
-| EXP-016 | `openapi` response `fields`/`exclude` valid field IDs; no overlap                               | ERROR | 0.0.1-alpha |
-| EXP-017 | `openapi` filter MUST be valid JSON Logic                                                       | ERROR | 0.0.1-alpha |
-| EXP-018 | `openapi` `maxPageSize` ≥ `defaultPageSize`; `pageSize` ≤ `maxPageSize`                         | ERROR | 0.0.1-alpha |
-| EXP-019 | `openapi` version valid; endpoint paths unique                                                  | ERROR | 0.0.1-alpha |
-| EXP-020 | `rss` export `table` MUST reference an existing table                                           | ERROR | 0.0.1-alpha |
-| EXP-021 | `rss` export all specified `fields.*` values MUST reference valid field IDs in the target table | ERROR | 0.0.1-alpha |
-| EXP-022 | `rss` export `sort.field` MUST reference a valid field ID in the target table                   | ERROR | 0.0.1-alpha |
-| EXP-023 | `rss` export enclosure: if `enclosureUrl` is set, `enclosureType` MUST also be set              | ERROR | 0.0.1-alpha |
+| ID      | Description                                                                                                                  | Sev   | Since       |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- | ----------- |
+| EXP-001 | Export keys MUST be unique and valid `Identifier`                                                                            | ERROR | 0.0.1-alpha |
+| EXP-002 | `files` export paths MUST start with `/`                                                                                     | ERROR | 0.0.1-alpha |
+| EXP-003 | Path keys MUST be unique within export                                                                                       | ERROR | 0.0.1-alpha |
+| EXP-004 | `files` table refs MUST exist                                                                                                | ERROR | 0.0.1-alpha |
+| EXP-005 | `files` formats MUST be valid IANA MIME types with known extensions                                                          | ERROR | 0.0.1-alpha |
+| EXP-006 | `files` filter MUST be valid JSON Logic with table field refs                                                                | ERROR | 0.0.1-alpha |
+| EXP-007 | `encoding` MUST be allowed value; defaults to `utf-8`                                                                        | ERROR | 0.0.1-alpha |
+| EXP-008 | `endpoint` MUST start with `/` and be non-empty                                                                              | ERROR | 0.0.1-alpha |
+| EXP-009 | `graphql` tables non-empty; each key MUST reference existing table                                                           | ERROR | 0.0.1-alpha |
+| EXP-010 | `odata` tables non-empty; `entitySetName`/`entityTypeName` valid identifiers                                                 | ERROR | 0.0.1-alpha |
+| EXP-011 | `sparql` tables non-empty; field mappings, `classUri`, templates valid                                                       | ERROR | 0.0.1-alpha |
+| EXP-012 | `sparql` writes require `updateEndpoint` or default update path                                                              | ERROR | 0.0.1-alpha |
+| EXP-013 | `soap` tables non-empty; valid identifiers, filter valid JSON Logic                                                          | ERROR | 0.0.1-alpha |
+| EXP-014 | `soap` namespace MUST be valid URI; `serviceName` valid identifier                                                           | ERROR | 0.0.1-alpha |
+| EXP-015 | `openapi` paths start with `/`; table refs valid                                                                             | ERROR | 0.0.1-alpha |
+| EXP-016 | `openapi` response `fields`/`exclude` valid field IDs; no overlap                                                            | ERROR | 0.0.1-alpha |
+| EXP-017 | `openapi` filter MUST be valid JSON Logic                                                                                    | ERROR | 0.0.1-alpha |
+| EXP-018 | `openapi` `maxPageSize` ≥ `defaultPageSize`; `pageSize` ≤ `maxPageSize`                                                      | ERROR | 0.0.1-alpha |
+| EXP-019 | `openapi` version valid; endpoint paths unique                                                                               | ERROR | 0.0.1-alpha |
+| EXP-020 | `rss` export `table` MUST reference an existing table                                                                        | ERROR | 0.0.1-alpha |
+| EXP-021 | `rss` export all specified `fields.*` values MUST reference valid field IDs in the target table                              | ERROR | 0.0.1-alpha |
+| EXP-022 | `rss` export `sort.field` MUST reference a valid field ID in the target table                                                | ERROR | 0.0.1-alpha |
+| EXP-023 | `rss` export enclosure: if `enclosureUrl` is set, `enclosureType` MUST also be set                                           | ERROR | 0.0.1-alpha |
+| EXP-024 | All paginated exports MUST apply a default page size; unbounded result sets MUST NOT be returned                             | ERROR | 0.0.1-alpha |
+| EXP-025 | All export types MUST enforce the full export data pipeline (tenancy → `table.filter` → `rowSecurity` → field accessibility) | ERROR | 0.0.1-alpha |
 
 ---
 
@@ -461,16 +472,18 @@ Applies to `table.formatRules` entries.
 
 ## Slice Rules
 
-| ID      | Description                                                                 | Sev   | Since       |
-| ------- | --------------------------------------------------------------------------- | ----- | ----------- |
-| SLC-001 | `slice.table` MUST reference existing table                                 | ERROR | 0.0.1-alpha |
-| SLC-002 | `slice.columns` entries MUST be valid base table field IDs                  | ERROR | 0.0.1-alpha |
-| SLC-003 | `slice.actions` entries MUST be valid base table action IDs                 | ERROR | 0.0.1-alpha |
-| SLC-004 | `slice.workflows` entries MUST be existing workflows                        | ERROR | 0.0.1-alpha |
-| SLC-005 | `slice.filter` MUST be valid `RowCondition` against base table              | ERROR | 0.0.1-alpha |
-| SLC-006 | `additionalFields` IDs MUST NOT collide with base table or other additions  | ERROR | 0.0.1-alpha |
-| SLC-007 | `additionalActions` IDs MUST NOT collide with base table or other additions | ERROR | 0.0.1-alpha |
-| SLC-008 | `formatRules` field refs resolve against union of base + additional fields  | ERROR | 0.0.1-alpha |
+| ID      | Description                                                                                            | Sev   | Since       |
+| ------- | ------------------------------------------------------------------------------------------------------ | ----- | ----------- |
+| SLC-001 | `slice.table` MUST reference existing table                                                            | ERROR | 0.0.1-alpha |
+| SLC-002 | `slice.columns` entries MUST be valid base table field IDs                                             | ERROR | 0.0.1-alpha |
+| SLC-003 | `slice.actions` entries MUST be valid base table action IDs                                            | ERROR | 0.0.1-alpha |
+| SLC-004 | `slice.workflows` entries MUST be existing workflows                                                   | ERROR | 0.0.1-alpha |
+| SLC-005 | `slice.filter` MUST be valid `RowCondition` against base table                                         | ERROR | 0.0.1-alpha |
+| SLC-006 | `additionalFields` IDs MUST NOT collide with base table or other additions                             | ERROR | 0.0.1-alpha |
+| SLC-007 | `additionalActions` IDs MUST NOT collide with base table or other additions                            | ERROR | 0.0.1-alpha |
+| SLC-008 | `formatRules` field refs resolve against union of base + additional fields                             | ERROR | 0.0.1-alpha |
+| SLC-009 | Writes through a slice MUST be applied to the base table; rows violating slice filter MUST be rejected | ERROR | 0.0.1-alpha |
+| SLC-010 | Slice audit entries MUST reference the base table key as `entity_table`                                | ERROR | 0.0.1-alpha |
 
 ---
 
@@ -478,14 +491,40 @@ Applies to `table.formatRules` entries.
 
 `RowSecurity` defines row-level access control via `BooleanOrCondition`.
 
-| ID      | Description                                                    | Sev   | Since       |
-| ------- | -------------------------------------------------------------- | ----- | ----------- |
-| RSC-001 | Each property MUST be valid `BooleanOrCondition`               | ERROR | 0.0.1-alpha |
-| RSC-002 | `rowSecurity.read` false: row silently filtered from results   | ERROR | 0.0.1-alpha |
-| RSC-003 | `rowSecurity.create` fail: reject with `AUTH_FORBIDDEN`        | ERROR | 0.0.1-alpha |
-| RSC-004 | `rowSecurity.update` false: reject with `AUTH_FORBIDDEN`       | ERROR | 0.0.1-alpha |
-| RSC-005 | `rowSecurity.delete` false: reject with `AUTH_FORBIDDEN`       | ERROR | 0.0.1-alpha |
-| RSC-006 | Order: `table.filter` → `rowSecurity` → action/view conditions | ERROR | 0.0.1-alpha |
+| ID      | Description                                                                               | Sev   | Since       |
+| ------- | ----------------------------------------------------------------------------------------- | ----- | ----------- |
+| RSC-001 | Each property MUST be valid `BooleanOrCondition`                                          | ERROR | 0.0.1-alpha |
+| RSC-002 | `rowSecurity.read` false: row silently filtered from results                              | ERROR | 0.0.1-alpha |
+| RSC-003 | `rowSecurity.create` fail: reject with `AUTH_FORBIDDEN`                                   | ERROR | 0.0.1-alpha |
+| RSC-004 | `rowSecurity.update` false: reject with `AUTH_FORBIDDEN`                                  | ERROR | 0.0.1-alpha |
+| RSC-005 | `rowSecurity.delete` false: reject with `AUTH_FORBIDDEN`                                  | ERROR | 0.0.1-alpha |
+| RSC-006 | Order: `table.filter` → `rowSecurity` → action/view conditions                            | ERROR | 0.0.1-alpha |
+| RSC-007 | Export reads MUST enforce `rowSecurity.read`; writes MUST enforce the operation condition | ERROR | 0.0.1-alpha |
+| RSC-008 | Bulk and batch operations MUST evaluate row security per row, not per batch               | ERROR | 0.0.1-alpha |
+
+---
+
+## Internationalization Rules
+
+| ID       | Description                                                                                          | Sev     | Since       |
+| -------- | ---------------------------------------------------------------------------------------------------- | ------- | ----------- |
+| I18N-001 | `i18n.defaultLocale` MUST be a valid BCP 47 tag                                                      | ERROR   | 0.0.1-alpha |
+| I18N-002 | `i18n.fallbackLocale` (if set) MUST be in `i18n.supportedLocales`                                    | ERROR   | 0.0.1-alpha |
+| I18N-003 | `i18n.defaultLocale` MUST be in `i18n.supportedLocales` (when `supportedLocales` is present)         | ERROR   | 0.0.1-alpha |
+| I18N-004 | `LocalizedString` locale keys SHOULD be in `i18n.supportedLocales`                                   | WARNING | 0.0.1-alpha |
+| I18N-005 | `LocalizedString` map values MUST include `_default` key when no `i18n.fallbackLocale` is configured | ERROR   | 0.0.1-alpha |
+| I18N-006 | Locale resolution MUST NOT alter field data values                                                   | ERROR   | 0.0.1-alpha |
+
+---
+
+## Application Rules
+
+| ID      | Description                                                                             | Sev   | Since       |
+| ------- | --------------------------------------------------------------------------------------- | ----- | ----------- |
+| APP-001 | `app.defaultView` (when static string) MUST reference an existing view key              | ERROR | 0.0.1-alpha |
+| APP-002 | `app.defaultView` (when condition) MUST be valid JSON Logic                             | ERROR | 0.0.1-alpha |
+| APP-003 | `app.defaultView` condition result MUST be a valid view key at runtime                  | ERROR | 0.0.1-alpha |
+| APP-004 | If no accessible view exists at runtime, the implementation MUST present an error state | ERROR | 0.0.1-alpha |
 
 ---
 
