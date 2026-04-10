@@ -4828,6 +4828,10 @@
                     "type": "string",
                     "enum": ["none", "apikey", "jwt", "oauth2"],
                     "description": "Authentication type."
+                },
+                "accessible": {
+                    "$ref": "#/$defs/RowCondition",
+                    "description": "JSON Logic condition evaluated for granting access using the authenticated caller's context."
                 }
             },
             "allOf": [
