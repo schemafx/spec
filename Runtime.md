@@ -1805,6 +1805,76 @@ Group views compose multiple views sequentially:
 
 ---
 
+## View Path Resolution
+
+> **§ Normative**
+
+When `view.path` is present, it defines the application URL path pattern for the view. Path patterns consist of static segments and dynamic parameter segments.
+
+### Path Syntax
+
+A `view.path` is a sequence of `/`-prefixed segments:
+
+- **Static segment** — a literal string (e.g., `/orders`). Matched exactly.
+- **Parameter segment** — a `{fieldId}` token (e.g., `/{orderId}`). Matched against any single non-empty path segment. The captured value is bound to the named field.
+
+Examples:
+
+| Path Pattern                     | Matches URL           | Bindings             |
+| -------------------------------- | --------------------- | -------------------- |
+| `/orders`                        | `/orders`             | (none)               |
+| `/orders/{orderId}`              | `/orders/42`          | `orderId` = `"42"`   |
+| `/customers/{customerId}/orders` | `/customers/7/orders` | `customerId` = `"7"` |
+
+### Path Parameter Binding
+
+1. Extract parameter values from the matched URL segments.
+2. Coerce each value to the target field's type: `string` used as-is, `integer` parsed as decimal, `reference` resolved as the foreign key value.
+3. If coercion fails, the route MUST NOT match (return `NOT_FOUND_VIEW`).
+
+### Path Parameter Filtering
+
+Path parameters produce implicit equality filters on the view's data:
+
+- Each `{fieldId}` generates a condition equivalent to `{"==": [{"var": "fieldId"}, <value>]}`.
+- Multiple parameters are combined via AND.
+- Path parameter filters are applied at the same pipeline stage as `view.filter` and combined with it via AND.
+
+The full data access pipeline with path parameters:
+
+1. Partition resolution
+2. Tenancy enforcement
+3. `table.filter`
+4. `table.rowSecurity`
+5. `view.filter` AND path parameter filters
+
+### Navigate Action Integration
+
+When a navigate action uses `protocol: "view"` and the target view has a `path`:
+
+1. Resolve the target view by `address` (view ID).
+2. Construct the application URL by substituting path parameter `{fieldId}` tokens with values from the current row context.
+3. If any required path parameter cannot be resolved from the row context, the navigation MUST fail with `VALIDATION_FAILED`.
+
+When the target view has no `path`, navigation resolves by view ID as defined in [Navigate](#navigate).
+
+### URL Matching
+
+URL path segments MUST be percent-decoded before matching. Matching MUST be case-sensitive.
+
+When an incoming application URL is matched against defined view paths:
+
+1. Discard paths whose segment count differs from the URL's segment count.
+2. For remaining candidates, compare segment-by-segment: static segments must match exactly; parameter segments match any non-empty value.
+3. Rank candidates by specificity: paths with more static segments take precedence over paths with more parameters.
+4. If candidates are still tied, the path whose view appears first in schema definition order wins.
+5. If no path matches, return `NOT_FOUND_VIEW`.
+6. After matching, evaluate `view.accessible`. If falsy, return `NOT_FOUND_VIEW`.
+
+Because VIW-022 rejects overlapping patterns at validation time, steps 3–4 are safety fallbacks — conformant schemas will have at most one candidate after step 2.
+
+---
+
 ## View Accessibility Enforcement
 
 > **§ Normative**
