@@ -899,6 +899,22 @@ Unknown keys tolerated (INFO log). MUST NOT reject schema.
 
 ---
 
+## Export Auth Enforcement
+
+> **§ Normative**
+
+When an export `auth` block is present, the runtime MUST enforce the following sequence on every inbound request to the export endpoint:
+
+1. **Credential verification** — attempt to resolve the credential for the configured `type` (`apikey`, `jwt`, `oauth2`). Invalid credentials (malformed token, bad signature, revoked key) MUST be rejected immediately. Absent credentials (no credential supplied) are allowed to proceed to the next step.
+2. **Accessible check** — if `auth.accessible` is present, evaluate the `RowCondition` against the caller context (equivalent to `{"record": "user"}`). If the condition evaluates falsy, the request MUST be rejected. If `auth.accessible` is absent, requests with absent credentials are rejected at this point.
+3. **Data access** — proceed to serve data. `table.filter`, `rowSecurity`, and per-export `filter` conditions still apply.
+
+The `accessible` condition is a strict gate: it is evaluated _after_ credential verification and _before_ any data access. It MUST NOT be bypassed by caching or short-circuit evaluation.
+
+When `auth.type` is `none`, `accessible` is still evaluated if present. The normal rule applies: the request is denied only if the condition resolves falsy; a truthy result allows the request through regardless of caller context.
+
+---
+
 ## File Export Behavior
 
 > **§ Normative**
